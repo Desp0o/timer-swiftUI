@@ -17,7 +17,7 @@ struct ContentView: View {
     var body: some View {
         VStack(spacing: 50) {
             HStack(alignment: .firstTextBaseline, spacing: 15) {
-                Text("ტაიმერები")
+                Text("Timers")
                     .foregroundColor(.white)
                     .font(.system(size: 24))
                     .fontWeight(.bold)
@@ -37,33 +37,33 @@ struct ContentView: View {
             .scrollIndicators(.hidden)
             
             VStack(spacing: 15) {
-                TextField("", text: $name, prompt: Text("ტაიმერის სახელი...").foregroundColor(.boulder))
+                TextField("", text: $name, prompt: Text("timer name...").foregroundColor(.boulder))
                     .styledField()
                     .onChange(of: name) {newValue, oldValue in
                         name = newValue
                     }
                 
                 HStack(spacing: 10) {
-                    TextField("", text: $hours, prompt: Text("სთ").foregroundColor(.boulder))
+                    TextField("", text: $hours, prompt: Text("HH").foregroundColor(.boulder))
                         .styledField()
                         .onChange(of: hours) {newValue, oldValue in
                             hours = newValue
                         }
                     
-                    TextField("", text: $minutes, prompt: Text("წთ").foregroundColor(.boulder))
+                    TextField("", text: $minutes, prompt: Text("MM").foregroundColor(.boulder))
                         .styledField()
                         .onChange(of: minutes) {newValue, oldValue in
                             minutes = newValue
                         }
                     
-                    TextField("", text: $seconds, prompt: Text("წმ").foregroundColor(.boulder))
+                    TextField("", text: $seconds, prompt: Text("SS").foregroundColor(.boulder))
                         .styledField()
                         .onChange(of: seconds) {newValue, oldValue in
                             seconds = newValue
                         }
                 }
                 
-                Button("დამატება") {
+                Button("Add timer") {
                     viewModel.addTimer(
                         name: name,
                         hh: hours,
@@ -128,7 +128,7 @@ struct CardView: View {
                         viewModel.startTimer(for: timer)
                     }
                 } label: {
-                    Text(timer.isStarted ? "პაუზა" : timer.isPaused ? "გაგრძელება" : "დაწყება")
+                    Text(timer.isStarted ? "pause" : timer.isPaused ? "resume" : "start")
                 }
                 .timerButtonStyles(bgColor: timer.isStarted ? .pizzaz : timer.duration == 0 ? .gray : .emerlad)
                 .disabled(timer.duration == 0)
@@ -137,7 +137,7 @@ struct CardView: View {
                 Button {
                     viewModel.resetTimer(for: timer)
                 } label: {
-                    Text("გადატვირთვა")
+                    Text("restart")
                 }
                 .timerButtonStyles(bgColor: .red)
             }

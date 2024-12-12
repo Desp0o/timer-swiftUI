@@ -41,23 +41,25 @@ class ViewModel: ObservableObject {
         timerCancellables[timer.id] = Timer.publish(every: 1, on: .main, in: .common)
             .autoconnect()
             .sink { [weak self] _ in
-                if self?.timersArray[index].duration ?? 0 > 0 {
-                    self?.timersArray[index].duration -= 1
-                } else {
-                    self?.playAudio()
-                    self?.feedbackGenerator.impactOccurred()
-                    print("🔴 feedbackGenerator.impactOccurred()")
-                    self?.stopTimer(for: timer)
-                    self?.timersArray[index].isPaused = false
+                if let index = self?.timersArray.firstIndex(where: { $0.id == timer.id }) {
+                    if self?.timersArray[index].duration ?? 0 > 0 {
+                        self?.timersArray[index].duration -= 1
+                    } else {
+                        self?.playAudio()
+                        self?.feedbackGenerator.impactOccurred()
+                        print("🔴 feedbackGenerator.impactOccurred()")
+                        self?.stopTimer(for: timer)
+                        self?.timersArray[index].isPaused = false
+                    }
                 }
             }
     }
     
     func stopTimer(for timer: TimerModel) {
         if let index = timersArray.firstIndex(where: { $0.id == timer.id }) {
+            timerCancellables[timer.id]?.cancel()
             timersArray[index].isStarted = false
             timersArray[index].isPaused = true
-            timerCancellables[timer.id]?.cancel()
         }
     }
     
